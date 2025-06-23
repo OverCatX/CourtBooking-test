@@ -5,6 +5,7 @@ import liff from "@line/liff";
 
 export default function BookingPage() {
   const [name, setName] = useState("");
+  const [token, setToken] = useState("");
   const [pictureUrl, setPictureUrl] = useState<string | undefined>();
   const [selectedTime, setSelectedTime] = useState("");
   const [selectedCourt, setSelectedCourt] = useState("");
@@ -14,29 +15,55 @@ export default function BookingPage() {
   const courts = ["Court A", "Court B", "Court C"];
 
   useEffect(() => {
-    liff
-      .init({ liffId: "2007624537-O6KnVQar" })
-      .then(() => {
+    const initLiff = async () => {
+      try {
+        await liff.init({ liffId: "2007624537-O6KnVQar" });
         if (!liff.isLoggedIn()) {
           liff.login();
-        } else {
-          return liff.getProfile();
+          return;
         }
-      })
-      .then((profile) => {
-        if (profile) {
-          setName(profile.displayName);
-          setPictureUrl(profile.pictureUrl || "");
-        }
-      })
-      .catch((err) => {
+        const profile = await liff.getProfile();
+        setName(profile.displayName);
+        setToken(profile.userId);
+        setPictureUrl(profile.pictureUrl || "");
+      } catch (err) {
         console.error("getProfile error:", err);
-      })
-      .finally(() => setLoading(false));
+      } finally {
+        setLoading(false);
+      }
+    };
+    initLiff();
   }, []);
 
-  const handleSubmit = () => {
-    alert(`คุณ ${name} จอง ${selectedCourt} เวลา ${selectedTime}`);
+  const handleSubmit = async () => {
+    const message = {
+      type: "flex",
+      altText: "ยืนยันการจองสนามแบดมินตัน",
+      contents: {
+        type: "bubble",
+        body: {
+          type: "box",
+          layout: "vertical",
+          spacing: "sm",
+          contents: [
+            {
+              type: "text",
+              text: "✅ จองสำเร็จแล้ว!",
+              weight: "bold",
+              size: "lg",
+              color: "#1B9C85",
+            },
+            {
+              type: "text",
+              text: `คุณ ${name} ได้จอง ${selectedCourt} เวลา ${selectedTime}`,
+              wrap: true,
+              size: "sm",
+              color: "#555555",
+            },
+          ],
+        },
+      },
+    };
     liff.closeWindow();
   };
 

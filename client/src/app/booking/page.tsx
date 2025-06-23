@@ -14,7 +14,7 @@ export default function BookingPage() {
 
   useEffect(() => {
     liff
-      .init({ liffId: "165XXXXXXXXX" })
+      .init({ liffId: "2007624537-O6KnVQar" })
       .then(() => {
         if (!liff.isLoggedIn()) {
           liff.login();
@@ -41,49 +41,71 @@ export default function BookingPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center bg-gray-100 px-4 py-6">
-      {pictureUrl && (
-        <img
-          src={pictureUrl}
-          alt="profile"
-          className="w-24 h-24 rounded-full mb-4 shadow-lg"
-        />
-      )}
-      <h1 className="text-xl font-bold mb-6">สวัสดี {name || "..."}</h1>
+    <div className="min-h-screen bg-gradient-to-br from-green-100 via-white to-green-50 flex flex-col justify-center items-center px-6 py-10">
+      <div className="w-full max-w-sm bg-white rounded-3xl shadow-2xl p-6 relative">
+        <div className="flex flex-col items-center mb-6">
+          {pictureUrl && (
+            <img
+              src={pictureUrl}
+              alt="profile"
+              className="w-24 h-24 rounded-full mb-2 shadow-lg border-4 border-white -mt-14 z-10"
+            />
+          )}
+          <h2 className="text-lg font-semibold text-gray-700">
+            👋 สวัสดี {name || "..."}
+          </h2>
+        </div>
 
-      <select
-        value={selectedCourt}
-        onChange={(e) => setSelectedCourt(e.target.value)}
-        className="mb-4 p-2 rounded-md w-full max-w-xs"
-      >
-        <option value="">เลือกสนาม</option>
-        {courts.map((c) => (
-          <option key={c} value={c}>
-            {c}
-          </option>
-        ))}
-      </select>
+        <h1 className="text-2xl font-extrabold text-center text-green-600 mb-6 tracking-tight">
+          🏸 จองสนามแบดมินตัน
+        </h1>
 
-      <select
-        value={selectedTime}
-        onChange={(e) => setSelectedTime(e.target.value)}
-        className="mb-4 p-2 rounded-md w-full max-w-xs"
-      >
-        <option value="">เลือกเวลา</option>
-        {times.map((t) => (
-          <option key={t} value={t}>
-            {t}
-          </option>
-        ))}
-      </select>
+        <div className="space-y-5">
+          <div>
+            <label className="block text-sm font-semibold text-gray-600 mb-1">
+              🏟 เลือกสนาม
+            </label>
+            <select
+              value={selectedCourt}
+              onChange={(e) => setSelectedCourt(e.target.value)}
+              className="w-full p-3 border rounded-xl bg-gray-50 shadow-sm focus:outline-none focus:ring-2 focus:ring-green-300"
+            >
+              <option value="">-- กรุณาเลือกสนาม --</option>
+              {courts.map((c) => (
+                <option key={c} value={c}>
+                  {c}
+                </option>
+              ))}
+            </select>
+          </div>
 
-      <button
-        onClick={handleSubmit}
-        className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
-        disabled={!selectedCourt || !selectedTime}
-      >
-        ✅ ยืนยันการจอง
-      </button>
+          <div>
+            <label className="block text-sm font-semibold text-gray-600 mb-1">
+              ⏰ เลือกเวลา
+            </label>
+            <select
+              value={selectedTime}
+              onChange={(e) => setSelectedTime(e.target.value)}
+              className="w-full p-3 border rounded-xl bg-gray-50 shadow-sm focus:outline-none focus:ring-2 focus:ring-green-300"
+            >
+              <option value="">-- กรุณาเลือกเวลา --</option>
+              {times.map((t) => (
+                <option key={t} value={t}>
+                  {t}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <button
+            onClick={handleSubmit}
+            disabled={!selectedCourt || !selectedTime}
+            className="w-full bg-gradient-to-r from-green-400 to-green-600 text-white text-lg font-bold py-3 rounded-xl shadow-lg hover:scale-[1.02] active:scale-100 transition-transform disabled:opacity-50"
+          >
+            ✅ ยืนยันการจอง
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

@@ -8,31 +8,31 @@ export default function BookingPage() {
   const [pictureUrl, setPictureUrl] = useState<string | undefined>();
   const [selectedTime, setSelectedTime] = useState("");
   const [selectedCourt, setSelectedCourt] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const times = ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00"];
   const courts = ["Court A", "Court B", "Court C"];
 
   useEffect(() => {
     liff
-      .init({ liffId: "2007624537-O6KnVQar" })
+      .init({ liffId: "165XXXXXXXXX" })
       .then(() => {
         if (!liff.isLoggedIn()) {
           liff.login();
         } else {
-          liff
-            .getProfile()
-            .then((profile) => {
-              setName(profile.displayName);
-              setPictureUrl(profile.pictureUrl);
-            })
-            .catch((err) => {
-              console.error("getProfile error:", err);
-            });
+          return liff.getProfile();
+        }
+      })
+      .then((profile) => {
+        if (profile) {
+          setName(profile.displayName);
+          setPictureUrl(profile.pictureUrl || "");
         }
       })
       .catch((err) => {
-        console.error("LIFF init failed:", err);
-      });
+        console.error("getProfile error:", err);
+      })
+      .finally(() => setLoading(false));
   }, []);
 
   const handleSubmit = () => {
@@ -43,18 +43,25 @@ export default function BookingPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-100 via-white to-green-50 flex flex-col justify-center items-center px-6 py-10">
       <div className="w-full max-w-sm bg-white rounded-3xl shadow-2xl p-6 relative">
-        <div className="flex flex-col items-center mb-6">
-          {pictureUrl && (
-            <img
-              src={pictureUrl}
-              alt="profile"
-              className="w-24 h-24 rounded-full mb-2 shadow-lg border-4 border-white -mt-14 z-10"
-            />
-          )}
-          <h2 className="text-lg font-semibold text-gray-700">
-            👋 สวัสดี {name || "..."}
-          </h2>
-        </div>
+        {loading ? (
+          <div className="animate-pulse flex flex-col items-center mb-6">
+            <div className="w-24 h-24 bg-gray-300 rounded-full mb-2" />
+            <div className="w-28 h-4 bg-gray-300 rounded" />
+          </div>
+        ) : (
+          <div className="flex flex-col items-center mb-6">
+            {pictureUrl && (
+              <img
+                src={pictureUrl}
+                alt="profile"
+                className="w-24 h-24 rounded-full mb-2 shadow-lg border-4 border-white -mt-14 z-10"
+              />
+            )}
+            <h2 className="text-lg font-semibold text-gray-700">
+              👋 สวัสดี {name || "..."}
+            </h2>
+          </div>
+        )}
 
         <h1 className="text-2xl font-extrabold text-center text-green-600 mb-6 tracking-tight">
           🏸 จองสนามแบดมินตัน

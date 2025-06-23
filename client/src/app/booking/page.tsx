@@ -36,34 +36,36 @@ export default function BookingPage() {
   }, []);
 
   const handleSubmit = async () => {
-    const message = {
-      type: "flex",
-      altText: "ยืนยันการจองสนามแบดมินตัน",
-      contents: {
-        type: "bubble",
-        body: {
-          type: "box",
-          layout: "vertical",
-          spacing: "sm",
-          contents: [
-            {
-              type: "text",
-              text: "✅ จองสำเร็จแล้ว!",
-              weight: "bold",
-              size: "lg",
-              color: "#1B9C85",
-            },
-            {
-              type: "text",
-              text: `คุณ ${name} ได้จอง ${selectedCourt} เวลา ${selectedTime}`,
-              wrap: true,
-              size: "sm",
-              color: "#555555",
-            },
-          ],
+    liff.sendMessages([
+      {
+        type: "flex",
+        altText: "ยืนยันการจองสนามแบดมินตัน",
+        contents: {
+          type: "bubble",
+          body: {
+            type: "box",
+            layout: "vertical",
+            spacing: "sm",
+            contents: [
+              {
+                type: "text",
+                text: "✅ จองสำเร็จแล้ว!",
+                weight: "bold",
+                size: "lg",
+                color: "#1B9C85",
+              },
+              {
+                type: "text",
+                text: `คุณ ${name} ได้จอง ${selectedCourt} เวลา ${selectedTime}`,
+                wrap: true,
+                size: "sm",
+                color: "#555555",
+              },
+            ],
+          },
         },
       },
-    };
+    ]);
     liff.closeWindow();
   };
 

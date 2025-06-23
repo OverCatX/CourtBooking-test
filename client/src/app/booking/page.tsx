@@ -15,7 +15,7 @@ export default function BookingPage() {
 
   useEffect(() => {
     liff
-      .init({ liffId: "165XXXXXXXXX" })
+      .init({ liffId: "2007624537-O6KnVQar" })
       .then(() => {
         if (!liff.isLoggedIn()) {
           liff.login();
